@@ -85,13 +85,13 @@ pipeline {
 
         stage('Trivy Scan') {
             steps {
-                sh "trivy image --exit-code 0 --severity CRITICAL,HIGH --format table ${DOCKER_IMAGE}:${IMAGE_TAG} | tee trivy-report.txt"
+                sh "trivy image --skip-db-update --exit-code 0 --severity CRITICAL,HIGH --format table ${DOCKER_IMAGE}:${IMAGE_TAG} | tee trivy-report.txt"
             }
         }
 
         stage('SBOM (SPDX)') {
             steps {
-                sh "trivy image --format spdx-json --output sbom-spdx.json ${DOCKER_IMAGE}:${IMAGE_TAG}"
+                sh "trivy image --skip-db-update --format spdx-json --output sbom-spdx.json ${DOCKER_IMAGE}:${IMAGE_TAG}"
             }
         }
 
