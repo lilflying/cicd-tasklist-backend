@@ -1,5 +1,6 @@
 FROM node:20-alpine AS build
 WORKDIR /app
+ENV CHECKPOINT_DISABLE=1
 COPY package*.json ./
 COPY prisma ./prisma
 RUN npm ci
@@ -10,6 +11,7 @@ RUN npm run build
 FROM node:20-alpine AS runtime
 WORKDIR /app
 ENV NODE_ENV=production
+ENV CHECKPOINT_DISABLE=1
 COPY package*.json ./
 COPY prisma ./prisma
 RUN npm ci --omit=dev

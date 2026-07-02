@@ -10,6 +10,9 @@ pipeline {
         DOCKER_IMAGE = 'maberger38/tasklist-backend'
         IMAGE_TAG = "${env.BUILD_NUMBER}"
         SONAR_PROJECT_KEY = 'martin-tasklist-backend-exam'
+        CHECKPOINT_DISABLE = '1'
+        npm_config_fund = 'false'
+        npm_config_audit = 'false'
     }
 
     stages {
