@@ -47,10 +47,10 @@ pipeline {
             steps {
                 script {
                     def scannerHome = tool 'SonarScanner'
-                    withCredentials([string(credentialsId: 'sonarqube-token-martin', variable: 'SONAR_TOKEN')]) {
+                    withCredentials([string(credentialsId: 'sonarqube-token-local', variable: 'SONAR_TOKEN')]) {
                         sh """
                             ${scannerHome}/bin/sonar-scanner \
-                                -Dsonar.host.url=https://sonarqube.cicd.kits.ext.educentre.fr \
+                                -Dsonar.host.url=http://sonarqube:9000 \
                                 -Dsonar.token=\$SONAR_TOKEN \
                                 -Dsonar.projectKey=${SONAR_PROJECT_KEY} \
                                 -Dsonar.projectName="Martin TaskList Backend Exam"
