@@ -1,6 +1,10 @@
 pipeline {
     agent any
 
+    triggers {
+        pollSCM('H/5 * * * *')
+    }
+
     environment {
         DOCKERHUB_CREDENTIALS = 'dockerhub-creds'
         DOCKER_IMAGE = 'maberger38/tasklist-backend'
