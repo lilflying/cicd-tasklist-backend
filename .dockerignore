@@ -1,0 +1,9 @@
+node_modules
+dist
+coverage
+reports
+.git
+.env
+*.log
+prisma/test.db
+.idea
