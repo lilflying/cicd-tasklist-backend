@@ -45,19 +45,17 @@ pipeline {
 
         stage('SonarQube Analysis') {
             steps {
-                withCredentials([string(credentialsId: 'sonarqube-token-martin', variable: 'SONAR_TOKEN')]) {
-                    sh '''
-                        npx --yes sonarqube-scanner \
-                            -Dsonar.host.url=https://sonarqube.cicd.kits.ext.educentre.fr \
-                            -Dsonar.token=$SONAR_TOKEN \
-                            -Dsonar.projectKey=$SONAR_PROJECT_KEY \
-                            -Dsonar.projectName="Martin TaskList Backend Exam" \
-                            -Dsonar.sources=src \
-                            -Dsonar.exclusions=src/__tests__/**,**/*.d.ts \
-                            -Dsonar.tests=src/__tests__ \
-                            -Dsonar.test.inclusions=src/__tests__/**/*.test.ts \
-                            -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info
-                    '''
+                script {
+                    def scannerHome = tool 'SonarScanner'
+                    withCredentials([string(credentialsId: 'sonarqube-token-martin', variable: 'SONAR_TOKEN')]) {
+                        sh """
+                            ${scannerHome}/bin/sonar-scanner \
+                                -Dsonar.host.url=https://sonarqube.cicd.kits.ext.educentre.fr \
+                                -Dsonar.token=\$SONAR_TOKEN \
+                                -Dsonar.projectKey=${SONAR_PROJECT_KEY} \
+                                -Dsonar.projectName="Martin TaskList Backend Exam"
+                        """
+                    }
                 }
             }
         }
@@ -67,8 +65,14 @@ pipeline {
                 expression { fileExists('.scannerwork/report-task.txt') }
             }
             steps {
-                timeout(time: 5, unit: 'MINUTES') {
-                    waitForQualityGate abortPipeline: false
+                script {
+                    try {
+                        timeout(time: 5, unit: 'MINUTES') {
+                            waitForQualityGate abortPipeline: false
+                        }
+                    } catch (err) {
+                        echo "Quality Gate ignoré (webhook non configuré sur ce Jenkins partagé) : ${err}"
+                    }
                 }
             }
         }
