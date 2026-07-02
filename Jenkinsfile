@@ -9,7 +9,7 @@ pipeline {
         DOCKERHUB_CREDENTIALS = 'dockerhub-creds'
         DOCKER_IMAGE = 'maberger38/tasklist-backend'
         IMAGE_TAG = "${env.BUILD_NUMBER}"
-        SONAR_PROJECT_KEY = 'martin-tasklist-backend'
+        SONAR_PROJECT_KEY = 'martin-tasklist-backend-exam'
     }
 
     stages {
